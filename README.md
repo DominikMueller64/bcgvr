@@ -1,5 +1,7 @@
 bcgvr
 ======
+[![Travis-CI Build Status](https://travis-ci.org/DominikMueller64/bcgvr.svg?branch=master)](https://travis-ci.org/DominikMueller64/bcgvr)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.377030.svg)](https://doi.org/10.5281/zenodo.377030)
 
 bcgvr is a minimal [R](http://www.r-project.org) package for the computation/estimation of
 best conditional gametic values. The package contains a fast C++ routine and an
