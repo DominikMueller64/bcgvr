@@ -1,6 +1,6 @@
 Package: bcgvr
 Type: Package
-Title: Computation of the best conditional gametic value.
+Title: Computation of the best conditional gametic value
 Version: 1.0
 Date: 2017-03-10
 Author: Dominik Mueller 
@@ -10,4 +10,5 @@ License: GPL (>= 2)
 Imports: Rcpp (>= 0.12.9)
 LinkingTo: Rcpp, Meiosis, BH
 SystemRequirements: C++11
+Remotes: github::DominikMueller64/Meiosis
 RoxygenNote: 6.0.1
