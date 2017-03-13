@@ -3,31 +3,74 @@
 #include <Rcpp.h>
 #include <random>
 #include <vector>
+#include <tuple>
 #include <cstdlib>
 #include <limits>
 #include <cmath>
 #include <chrono>
 #include <Meiosis.h>
 
+#include "bcgv.hpp"
 
+std::random_device rdev;
+std::mt19937 engine;
+
+// Wrapper for interfacing `bcgv` with R.
 //' @rdname bcgv
 // [[Rcpp::export]]
 Rcpp::List bcgv(std::vector<std::vector<std::vector<double>>> individual,
                 std::vector<std::vector<double>> positions,
-                std::vector<std::vector<double>> locus_effects,
-                const unsigned int n_gam,
+                std::vector<std::vector<double>> effects,
+                const int n_gam,
                 const double se_level,
-                const unsigned int min_rep,
-                const unsigned int max_rep,
-                const unsigned int m,
-                const double p,
-                const int seed
-                )
+                const int min_rep,
+                const int max_rep,
+                const int m = 0,
+                const double p = 0.0,
+                Rcpp::Nullable<Rcpp::IntegerVector> seed = R_NilValue)
+{
+  if (individual.size() != 2) Rcpp::stop("'individual' must have two gametes (list of two).");
+  if (n_gam < 1) Rcpp::stop("'n_gam' must be >= 1.");
+  if (se_level <= 0.0) Rcpp::stop("'se_level' must be > 0.0.");
+  if (min_rep < 1) Rcpp::stop("'min_rep' must be > 0.");
+  if (max_rep < 1) Rcpp::stop("'max_rep' must be > 0.");
+  if (min_rep > max_rep) Rcpp::stop("'min_rep' must be smaller than or equal to 'max_rep'.");
+
+  if (m < 0) Rcpp::stop("'m' must be >= 0.");
+  if (p < 0.0 || p > 1.0) Rcpp::stop("'p' must be in [0, 1].");
+
+  int seed_;
+  if (seed.isNotNull()) {
+    seed_ = Rcpp::as<std::vector<int>>(seed)[0];
+  } else {
+    seed_ = std::random_device{}();
+  }
+
+  const auto& ret = bcgv_routine(individual, positions, effects, n_gam, se_level,
+                                 min_rep, max_rep, m, p, seed_);
+
+  return Rcpp::List::create(Rcpp::Named("bcgv") = std::get<0>(ret),
+                            Rcpp::Named("se") = std::get<1>(ret),
+                            Rcpp::Named("n") = std::get<2>(ret),
+                            Rcpp::Named("time (ms)") = std::get<3>(ret),
+                            Rcpp::Named("seed") = std::get<4>(ret));
+}
+
+
+// Evaluation of bcgv.
+t_tuple bcgv_routine(std::vector<std::vector<std::vector<double>>> individual,
+                     std::vector<std::vector<double>> positions,
+                     std::vector<std::vector<double>> effects,
+                     const unsigned int n_gam,
+                     const double se_level,
+                     const unsigned int min_rep,
+                     const unsigned int max_rep,
+                     const unsigned int m,
+                     const double p,
+                     const int seed
+                     )
 {
   auto t1 = std::chrono::high_resolution_clock::now();
-
-  if (min_rep > max_rep) Rcpp::stop("'min_rep' must be smaller than or equal to 'max_rep'");
-  if (p < 0.0 || p > 1.0) Rcpp::stop("'p' must be in [0, 1].");
 
   engine.seed(seed);
   const auto& xof = Meiosis::crossover<std::vector<double>>;
@@ -49,7 +92,7 @@ Rcpp::List bcgv(std::vector<std::vector<std::vector<double>>> individual,
     auto& gamete = individual[g];
     for (std::size_t i{0}; i != n_chr; ++i) {
       auto& chromatid = gamete[i];
-      auto& leff = locus_effects[i];
+      auto& leff = effects[i];
       std::transform(chromatid.begin(), chromatid.end(),
                      leff.begin(), chromatid.begin(), std::multiplies<double>());
       sums[g][i] = std::accumulate(chromatid.begin(), chromatid.end(), 0.0);
@@ -70,9 +113,9 @@ Rcpp::List bcgv(std::vector<std::vector<std::vector<double>>> individual,
     for (std::size_t g{0}; g != n_gam; ++g) {
       double value = 0.0;
       for (std::size_t i{0}; i != n_chr; ++i) {
-        const auto& xlocations = xof(L[i], m, p, obligate_chiasma, Lstar[i], engine2);
+        const auto& xlocations = xof(L[i], m, p, obligate_chiasma, Lstar[i], engine);
         value += meisum(individual[0][i], individual[1][i], xlocations,
-                        positions[i], sums[0][i], sums[1][i], engine2);
+                        positions[i], sums[0][i], sums[1][i], engine);
       }
       if (value > max_value) max_value = value;
     }
@@ -83,18 +126,16 @@ Rcpp::List bcgv(std::vector<std::vector<std::vector<double>>> individual,
     mean += delta / n;
     delta2 = max_value - mean;
     M2 += delta * delta2;
-    se = std::sqrt(M2 / (n * (n - 1)));
+    se = std::sqrt(M2 / (n * (n - 1))); // nan for n = 1.
   }
 
   auto t2 = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-  return Rcpp::List::create(Rcpp::Named("bcgv") = mean,
-                            Rcpp::Named("se") = se,
-                            Rcpp::Named("n") = n,
-                            Rcpp::Named("time (ms)") = duration / 1000.0);
+
+  return std::make_tuple(mean, se, n, duration / 1000.0, seed);
 }
 
-
+// Simulation of meiosis, effects are directly accumulated.
 double meisum(const t_alleles& patalle,
               const t_alleles& matalle,
               const t_locations& xlocations,

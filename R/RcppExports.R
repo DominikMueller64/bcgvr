@@ -2,7 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @rdname bcgv
-bcgv <- function(individual, positions, locus_effects, n_gam, se_level, min_rep, max_rep, m, p, seed) {
-    .Call('bcgvr_bcgv', PACKAGE = 'bcgvr', individual, positions, locus_effects, n_gam, se_level, min_rep, max_rep, m, p, seed)
+bcgv <- function(individual, positions, effects, n_gam, se_level, min_rep, max_rep, m = 0L, p = 0.0, seed = NULL) {
+    .Call('bcgvr_bcgv', PACKAGE = 'bcgvr', individual, positions, effects, n_gam, se_level, min_rep, max_rep, m, p, seed)
 }
 
