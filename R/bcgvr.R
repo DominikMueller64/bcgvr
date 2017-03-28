@@ -4,10 +4,5 @@
 #' gametic values.
 #'
 #' @docType package
-#' @name bcgv
-#'
-#'
-#'
-#'
-#'
-#'
+#' @name bcgvr
+NULL

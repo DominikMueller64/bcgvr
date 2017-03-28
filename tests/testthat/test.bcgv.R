@@ -21,7 +21,7 @@ test_that('Test passed', {
   val <- bcgvr::bcgv(ind, positions, effects, n_gam = 20L, se_level = 1.0, min_rep = 10L,
                     max_rep = 1000L, m = 0L, p = 0.0, seed = 456L)
 
-  expect_equal(ref$bcgv, val$bcgv)
-  expect_equal(ref$se, val$se)
+  expect_equal(ref$bcgv, val$bcgv, tolerance = 1e-3)
+  expect_equal(ref$se, val$se, tolerance = 1e-3)
   expect_equal(ref$n, val$n)
 })
