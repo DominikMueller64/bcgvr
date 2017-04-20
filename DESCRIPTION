@@ -1,7 +1,7 @@
-Package: bcgvr
+Package: embvr
 Type: Package
-Title: Computation of best conditional gametic values
-Version: 1.0
+Title: Computation of expected maximum haploid breeding values 
+Version: 1.1.0
 Date: 2017-03-10
 Author: Dominik Mueller 
 Maintainer: Dominik Mueller <dominikmueller64@yahoo.de>

@@ -1,10 +1,10 @@
-bcgvr
+embvr
 ======
-[![Travis-CI Build Status](https://travis-ci.org/DominikMueller64/bcgvr.svg?branch=master)](https://travis-ci.org/DominikMueller64/bcgvr)
+[![Travis-CI Build Status](https://travis-ci.org/DominikMueller64/embvr.svg?branch=master)](https://travis-ci.org/DominikMueller64/embvr)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.377030.svg)](https://doi.org/10.5281/zenodo.377030)
 
-bcgvr is a minimal [R](http://www.r-project.org) package for the computation/estimation of
-best conditional gametic values. The package contains a fast C++ routine and an
+embvr is a minimal [R](http://www.r-project.org) package for the estimation of
+expected maximum haploid breeding values. The package contains a fast C++ routine and an
 [Rcpp](http://www.rcpp.org/)-wrapper for exposing it to R.
 
 [//]: # (TODO: Add reference to publication.)
@@ -13,17 +13,17 @@ best conditional gametic values. The package contains a fast C++ routine and an
 
 ### Installation
 
-You can install bcgvr from its [GitHub repository](http://github.com/DominikMueller64/bcgvr).
+You can install embvr from its [GitHub repository](http://github.com/DominikMueller64/embvr).
 You first need to install the [devtools](https://github.com/hadley/devtools) package.
 
 ```r
 install.packages("devtools")
 ```
 
-Then install bcgvr with 
+Then install embvr with 
 
 ```r
-devtools::install_github("DominikMueller64/bcgvr")
+devtools::install_github("DominikMueller64/embvr")
 ```
 
 Windows users need to make sure that [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
@@ -33,7 +33,7 @@ is installed.
 
 ### Example
 
-Please refer to the documentation of the function `bcgv` for an example of usage.
+Please refer to the documentation of the function `embv` for an example of usage.
 
 
 ---
