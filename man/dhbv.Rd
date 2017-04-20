@@ -3,16 +3,17 @@
 \name{dhbv}
 \alias{dhbv}
 \alias{dhbv}
-\title{Simulation of doubled haploid breeding values
-
-A function for the fast simulation of double haploid breeding values.}
+\title{Simulation of doubled haploid breeding values}
 \usage{
 dhbv(individual, positions, effects, n_rep, m = 0L, p = 1, seed = NULL)
 }
 \arguments{
-\item{individual}{The genotype of the individual for which the EMBV should be computed. The structure is a nested list, where the first level refers to the two gametes and the second level to chromatids (integer vectors) within gametes.}
+\item{individual}{The genotype of the individual for which the EMBV should be computed.
+The structure is a nested list, where the first level refers to the two gametes and the
+second level to chromatids (integer vectors) within gametes.}
 
-\item{positions}{The genetic positions of loci. A list, where each element is a (strictly) increasingly sorted double vector.}
+\item{positions}{The genetic positions of loci. A list, where each element is a
+(strictly) increasingly sorted double vector.}
 
 \item{effects}{The effects of loci. A list, where each element is a double vector.}
 
@@ -26,6 +27,9 @@ dhbv(individual, positions, effects, n_rep, m = 0L, p = 1, seed = NULL)
 }
 \value{
 A double vector.
+}
+\description{
+A function for the fast simulation of double haploid breeding values.
 }
 \details{
 This function simulates the breeding values of `n_rep` double haploid lines generated

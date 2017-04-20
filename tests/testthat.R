@@ -1,4 +1,4 @@
 library(testthat)
-library(bcgvr)
+library(embvr)
 
-test_check("bcgvr")
+test_check("embvr")

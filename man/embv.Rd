@@ -3,17 +3,18 @@
 \name{embv}
 \alias{embv}
 \alias{embv}
-\title{Estimation of expected maximum haploid breeding values (EMBV)
-
-This is (the R wrapper of) a C++ routine for the fast estimation expected maximum haploid breeding values.}
+\title{Estimation of expected maximum haploid breeding values (EMBV)}
 \usage{
 embv(individual, positions, effects, n_gam, se_level, min_rep, max_rep,
   m = 0L, p = 1, seed = NULL)
 }
 \arguments{
-\item{individual}{The genotype of the individual for which the EMBV should be computed. The structure is a nested list, where the first level refers to the two gametes and the second level to chromatids (integer vectors) within gametes.}
+\item{individual}{The genotype of the individual for which the EMBV should be computed.
+The structure is a nested list, where the first level refers to the two gametes and the
+second level to chromatids (integer vectors) within gametes.}
 
-\item{positions}{The genetic positions of loci. A list, where each element is a (strictly) increasingly sorted double vector.}
+\item{positions}{The genetic positions of loci. A list, where each element is a
+(strictly) increasingly sorted double vector.}
 
 \item{effects}{The effects of loci. A list, where each element is a double vector.}
 
@@ -39,6 +40,10 @@ A list with the following elements:
     \item n: number of replicates
     \item time (ms): execution time in milliseconds
   }
+}
+\description{
+This is (the R wrapper of) a C++ routine for the fast estimation of
+expected maximum haploid breeding values.
 }
 \details{
 There will be at least \code{min_rep} and at maximum \code{max_rep} replicates.
